@@ -12,12 +12,12 @@ import java.util.List;
 @Mapper
 @Repository
 public interface DinnerRepository {
-    Long saveReservation(DinnerReservation reservation);
+    void saveReservation(DinnerReservation reservation);
     void updateInfo(DinnerReservationUpdate dinnerReservationUpdate);
     void updateCheckedInfo(DinnerInfoCheckedUpdate update);
     void updateCheckedReservation(DinnerReservationCheckedUpdate update);
 
-    Long saveInfo(DinnerInfo dinnerInfo);
+    void saveInfo(SaveDinnerInfo dinnerInfo);
     List<DinnerReservationInfo> findAllDTO(DinnerInfoDTO infoDTO);
 
     List<DinnerReservationInfo> findAll(@Param("visit_date") String visit_date);

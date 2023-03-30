@@ -13,7 +13,6 @@ import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class DinnerReservationUpdate {
 
     @NotNull

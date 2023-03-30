@@ -24,10 +24,10 @@ input.form-control{
 marin-top:1%;
 }
 
-
 form{
   margin-top:10px;
 }
+
 #globalError{
     margin-left:5%;
 }
@@ -67,7 +67,6 @@ div.row.mb-3{
     background-color:#fff171;
     border-radius:5px;
 }
-
 
 
 hr{

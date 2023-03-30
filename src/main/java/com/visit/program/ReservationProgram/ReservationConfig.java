@@ -19,10 +19,9 @@ public class ReservationConfig implements WebMvcConfigurer{
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new SessionInterceptor()).addPathPatterns("/m/**","/reservation","/reservation/**","/reservation/info/**","/dinner/*").order(1).
+        registry.addInterceptor(new SessionInterceptor()).addPathPatterns("/m/**","/reservation","/reservation/**","/reservation/info/**","/dinner/**").order(1).
                 excludePathPatterns("/reservation/info/all/rapigen_employee","/reservation/info/all/rapigen_security","/dinner/info/rapigen");
-        registry.addInterceptor(new MobileOrWebInterceptor()).addPathPatterns("/**").order(2).excludePathPatterns("/","/dinner/*");
-
+        registry.addInterceptor(new MobileOrWebInterceptor()).addPathPatterns("/**").order(2).excludePathPatterns("/","/dinner/**");
         registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/m/reservation/info/update/*","/m/reservation/info/delete/*",
                 "/dinner/info/update/{id}", "/dinner/info/delete/{id}",
                 "/reservation/info/update/{id}","/reservation/info/delete/{id}"

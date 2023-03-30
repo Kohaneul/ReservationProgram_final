@@ -6,8 +6,7 @@
         insert into dinner_reservation(loginId,part_name,employee_name,phone_number,visit_date,contents,qty,password, write_date,is_checked)
         values(#{loginId},#{part_name},#{employee_name},#{phone_number},#{visit_date},#{contents},#{qty},#{password}, #{write_date},#{is_checked})
     </insert>
-
-    <select id="updateInfo">
+    <select id="updateInfo" parameterType="com.visit.program.ReservationProgram.domain.dao.DinnerReservationUpdate">
         update dinner_reservation set id=#{id},loginId=#{loginId},employee_name=#{employee_name},phone_number=#{phone_number},visit_date=#{visit_date},contents=#{contents},qty=#{qty},revised_write_date=#{revised_write_date} where id = #{id}
     </select>
     <select id="updateCheckedInfo">
@@ -17,9 +16,9 @@
         update dinner_reservation set is_checked=1, checked_date=#{checked_date} where id = #{id}
     </select>
 
-    <insert id="saveInfo" parameterType="com.visit.program.ReservationProgram.domain.dao.DinnerReservation" useGeneratedKeys="true" keyProperty="id">
+    <select id="saveInfo" parameterType="com.visit.program.ReservationProgram.domain.dao.SaveDinnerInfo">
         insert into dinner_info(employee_id, dinner_reservation_id, is_checked) values(#{employee_id},#{dinner_reservation_id},#{is_checked})
-    </insert>
+    </select>
 
     <select id="findOne" resultType="com.visit.program.ReservationProgram.domain.dao.DinnerReservation">
         select id,loginId, part_name, employee_name, phone_number, visit_date, contents, qty, password, write_date, revised_write_date, is_checked, checked_date

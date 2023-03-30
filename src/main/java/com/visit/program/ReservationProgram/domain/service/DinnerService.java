@@ -24,13 +24,13 @@ public class DinnerService {
     @Transactional
     public Long save(DinnerReservationSave dinnerSave){
         DinnerReservation dinnerReservation = getDinnerReservation(dinnerSave);
-        Long savedId = repository.saveReservation(dinnerReservation);
-        log.info("savedId={}",savedId);
-        return savedId;
+        repository.saveReservation(dinnerReservation);
+        log.info("savedId={}",dinnerReservation.getId());
+        return dinnerReservation.getId();
     }
 
     private DinnerReservation getDinnerReservation(DinnerReservationSave save){
-        String nowDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy/MM/dd hh:mm"));
+        String nowDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy/MM/dd HH:mm"));
         return new DinnerReservation(save.getLoginId(),save.getPart_name(),save.getEmployee_name(),save.getPhone_number(),save.getVisit_date()
         ,save.getContents(),save.getQty(),save.getPassword(),nowDate,null,false,null);
     }
@@ -40,11 +40,8 @@ public class DinnerService {
     }
 
     @Transactional
-    public Long saveInfo(DinnerInfo dinnerInfo){
-      //  employee_id, dinner_reservation_id, is_checked
-        Employee employee = employeeRepository.findById(dinnerInfo.getEmployee_id());
-        Long saveInfoId = repository.saveInfo(dinnerInfo);
-        return saveInfoId;
+    public void saveInfo(SaveDinnerInfo dinnerInfo){
+        repository.saveInfo(dinnerInfo);
     }
 
     @Transactional
@@ -68,8 +65,6 @@ public class DinnerService {
     public void updateInfo(DinnerReservationUpdate dinnerReservationUpdate){
         repository.updateInfo(dinnerReservationUpdate);
     }
-
-
     @Transactional
     public void updateCheckedReservation(DinnerReservationCheckedUpdate update){
         repository.updateCheckedReservation(update);

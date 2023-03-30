@@ -20,14 +20,13 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
-        if(session.getAttribute(SessionConst.DINNER_PROGRAM)!=null || session.getAttribute(SessionConst.ACCESS_ID)!=null){
+        if(session.getAttribute(SessionConst.DINNER_PROGRAM)==null && session.getAttribute(SessionConst.ACCESS_ID)==null){
+            response.sendRedirect("/");
 //            response.sendRedirect("/dinner/info/all"); //만약 세션값이 없거나 정해진 PATH로 접속되지 않으면  SESSION(KEY:ACCESS_ID) 생성되지 않음. "/"로 리다이랙트
-            return true;
+            return false;
         }
 
-        response.sendRedirect("/"); //만약 세션값이 없거나 정해진 PATH로 접속되지 않으면  SESSION(KEY:ACCESS_ID) 생성되지 않음. "/"로 리다이랙트
-
-        return false;
+        return true;
     }
 
     @Override

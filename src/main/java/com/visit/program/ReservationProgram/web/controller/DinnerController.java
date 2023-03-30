@@ -102,8 +102,8 @@ public class DinnerController {
      }
         Long savedId = service.save(reservationSave);
         Employee employee = employeeService.findByLoginId(reservationSave.getLoginId());
-        service.saveInfo(new DinnerInfo(employee.getId(),savedId,false));
-     return "redirect:/dinner/info/all";
+        service.saveInfo(new SaveDinnerInfo(employee.getId(), savedId, false));
+        return "redirect:/dinner/info/all";
     }
 
 
@@ -121,29 +121,32 @@ public class DinnerController {
         int i = referURL.lastIndexOf("/")+1;
         referURL = referURL.substring(i,referURL.length());
         log.info("referURL={}",referURL);
-        out.println("<script>alert('"+message+"'); location.href='"+referURL+"';</script>");
+        out.println("<script>alert('"+message+"'); location.href='/dinner/info/"+referURL+"';</script>");
         out.flush();
     }
 
 
     @GetMapping("/update/{id}")
-    public String updateView(@PathVariable("id")Long id, Model model) {
-        log.info("updateView method1111");
+    public String updateView(@PathVariable("id")Long id, Model model,HttpServletRequest request, HttpServletResponse response) throws IOException {
         DinnerReservation before = service.findOne(id);
-        DinnerReservationUpdate reservation = new DinnerReservationUpdate(before.getId(),before.getLoginId(),before.getEmployee_name(),before.getPhone_number(),before.getVisit_date(),before.getContents()
-        ,before.getQty());
-        model.addAttribute("reservation",reservation);
-        model.addAttribute("hiddenValue",reservation.getVisit_date());
-            return "view2/UpdateForm";
+        HttpSession session = request.getSession();
+        if(session.getAttribute(SessionConst.ADMIN_ID)==null){
+          if (before.getIs_checked()) {
+                ex(ErrorMessage.ALREADY_CHECKED_MSG, request, response);
+            }
+            DinnerReservationUpdate reservation = new DinnerReservationUpdate
+                    (before.getId(),before.getLoginId(),before.getEmployee_name(),before.getPhone_number(),before.getVisit_date(),before.getContents()
+                            ,before.getQty());
+            model.addAttribute("reservation",reservation);
+            model.addAttribute("hiddenValue",reservation.getVisit_date());
+        }
+        return "view2/UpdateForm";
 
-//        return "redirect:/dinner/info/{id}";
     }
 
     @PostMapping("/update/{id}")
     public String updateView2(@PathVariable("id")Long id,@Valid @ModelAttribute("reservation")DinnerReservationUpdate reservation,BindingResult bindingResult){
         log.info("updateView method22222");
-
-
         if(bindingResult.hasErrors()){
             return "view2/UpdateForm";
         }
