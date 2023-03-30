@@ -33,7 +33,6 @@
                 and date(v.visit_date1) >= #{date1}
             </if>
 
-
             <if test="date2!=null and date2!=''">
                 and date(v.visit_date2) <![CDATA[ <= ]]> #{date2}
             </if>
