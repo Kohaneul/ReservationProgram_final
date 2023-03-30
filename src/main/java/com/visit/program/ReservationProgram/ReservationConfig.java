@@ -23,8 +23,7 @@ public class ReservationConfig implements WebMvcConfigurer{
                 excludePathPatterns("/reservation/info/all/rapigen_employee","/reservation/info/all/rapigen_security","/dinner/info/rapigen");
         registry.addInterceptor(new MobileOrWebInterceptor()).addPathPatterns("/**").order(2).excludePathPatterns("/","/dinner/**");
         registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/m/reservation/info/update/*","/m/reservation/info/delete/*",
-                "/dinner/info/update/{id}", "/dinner/info/delete/{id}",
-                "/reservation/info/update/{id}","/reservation/info/delete/{id}"
+                "/dinner/info/update/{id}", "/reservation/info/update/{id}","/reservation/info/delete/{id}"
                 ).order(3);
     }
 

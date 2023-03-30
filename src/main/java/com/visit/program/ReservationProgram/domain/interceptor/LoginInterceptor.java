@@ -27,6 +27,9 @@ public class LoginInterceptor implements HandlerInterceptor {
         int i = requestURI.lastIndexOf("/");
         requestURI = requestURI.substring(i+1);
         log.info("requestURI={}",requestURI);
+        if(session.getAttribute(SessionConst.ADMIN_ID)!=null){
+            return true;
+        }
         if(session.getAttribute(SessionConst.LOGIN_SUCCESS)==null){
             if(session.getAttribute(SessionConst.DINNER_PROGRAM)!=null){
                 response.sendRedirect("/dinner/login/"+requestURI);//로그인 성공을 하지 못하면 로그인 페이지로 다시 돌아감
@@ -35,6 +38,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             response.sendRedirect("/reservation/login/"+requestURI);//로그인 성공을 하지 못하면 로그인 페이지로 다시 돌아감
             return false;
         }
+
             return true;
         }
 

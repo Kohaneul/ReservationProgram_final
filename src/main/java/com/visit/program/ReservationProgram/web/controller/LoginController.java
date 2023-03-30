@@ -67,7 +67,9 @@ public class LoginController {
     }
 
     @GetMapping("/dinner/info/admin")
-    public String AdminLogin(@ModelAttribute("login") Login login) {
+    public String AdminLogin(@ModelAttribute("login") Login login,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.removeAttribute(SessionConst.LOGIN_SUCCESS);
         return "view2/Login";
     }
 

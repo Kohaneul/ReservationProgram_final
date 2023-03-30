@@ -4,13 +4,12 @@ import com.mysql.cj.Session;
 import com.visit.program.ReservationProgram.domain.dao.*;
 import com.visit.program.ReservationProgram.domain.dao.session.SessionConst;
 import com.visit.program.ReservationProgram.domain.dto.DinnerInfoDTO;
-import com.visit.program.ReservationProgram.domain.ex.AlreadyCheckedEx;
 import com.visit.program.ReservationProgram.domain.ex.ErrorMessage;
 import com.visit.program.ReservationProgram.domain.service.DinnerService;
 import com.visit.program.ReservationProgram.domain.service.EmployeeService;
+import com.visit.program.ReservationProgram.web.controller.path.CutStr;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.parsing.ConstructorArgumentEntry;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -106,7 +105,21 @@ public class DinnerController {
         return "redirect:/dinner/info/all";
     }
 
-
+    @GetMapping("/update/check/{id}")
+    public String checkUpdate(@PathVariable("id")Long id,HttpServletRequest request, HttpServletResponse response,Model model) throws IOException {
+        DinnerReservation before = service.findOne(id);
+        HttpSession session = request.getSession();
+        if(session.getAttribute(SessionConst.ADMIN_ID)==null){
+            if(before.getIs_checked()){
+                CutStr.ex(ErrorMessage.ALREADY_CHECKED_MSG, request, response,1);
+            }
+        }
+        DinnerReservationUpdate reservation = new DinnerReservationUpdate
+                (before.getId(),before.getLoginId(),before.getEmployee_name(),before.getPhone_number(),before.getVisit_date(),before.getContents()
+                        ,before.getQty());
+        model.addAttribute("reservation",reservation);
+        return "redirect:/dinner/info/update/{id}";
+    }
     @GetMapping("/{id}")
     public String detailView(@PathVariable("id")Long id,Model model){
         DinnerReservation reservation = service.findOne(id);
@@ -114,32 +127,19 @@ public class DinnerController {
         return "view2/ViewOne";
     }
 
-    private void ex(String message, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String referURL = request.getHeader("REFERER");
-        response.setContentType("text/html; charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        int i = referURL.lastIndexOf("/")+1;
-        referURL = referURL.substring(i,referURL.length());
-        log.info("referURL={}",referURL);
-        out.println("<script>alert('"+message+"'); location.href='/dinner/info/"+referURL+"';</script>");
-        out.flush();
-    }
+
 
 
     @GetMapping("/update/{id}")
-    public String updateView(@PathVariable("id")Long id, Model model,HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public String updateView(@PathVariable("id")Long id, Model model,HttpServletRequest request){
+
         DinnerReservation before = service.findOne(id);
-        HttpSession session = request.getSession();
-        if(session.getAttribute(SessionConst.ADMIN_ID)==null){
-          if (before.getIs_checked()) {
-                ex(ErrorMessage.ALREADY_CHECKED_MSG, request, response);
-            }
-            DinnerReservationUpdate reservation = new DinnerReservationUpdate
-                    (before.getId(),before.getLoginId(),before.getEmployee_name(),before.getPhone_number(),before.getVisit_date(),before.getContents()
-                            ,before.getQty());
-            model.addAttribute("reservation",reservation);
-            model.addAttribute("hiddenValue",reservation.getVisit_date());
-        }
+        DinnerReservationUpdate reservation = new DinnerReservationUpdate
+                (before.getId(),before.getLoginId(),before.getEmployee_name(),before.getPhone_number(),before.getVisit_date(),before.getContents()
+                        ,before.getQty());
+
+        model.addAttribute("reservation",reservation);
+        model.addAttribute("hiddenValue",reservation.getVisit_date());
         return "view2/UpdateForm";
 
     }

@@ -37,6 +37,7 @@ public class HomeController {
 
     @GetMapping("/reservation/info/all/rapigen_employee")
     public String viewEmployees(HttpSession session) {
+        session.removeAttribute(SessionConst.ADMIN_ID);
         String uri = "redirect:/reservation/info/save";
         AccessIdNull(session, UUID.randomUUID().toString());
         return uri;
@@ -52,6 +53,8 @@ public class HomeController {
     @GetMapping("/reservation/info/all/rapigen_security")
     public String viewSecurity(@ModelAttribute("reservationDTO")ReservationDTO reservationDTO,HttpSession session,Model model) {
         String url =   "redirect:/reservation/info/all";
+        session.removeAttribute(SessionConst.EMPLOYEE_ID);
+
         List<Reservation> reservations = reservationService.findAllDTO(reservationDTO);
         AccessIdNull(session,UUID.randomUUID().toString()+"security");
         model.addAttribute("reservations",reservations);

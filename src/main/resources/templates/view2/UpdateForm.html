@@ -33,7 +33,18 @@
 
     window.onload = function(){
         visitDateInput();
-        setCheck();
+    }
+
+
+  function sendDeleteFrm(){
+      let reservationId = document.getElementById('id').value;
+
+        if(confirm("삭제 하시겠습니까?")){
+        location.href = '/dinner/info/delete/'+reservationId;
+        }
+        else{
+                location.href = '/dinner/info/update/'+reservationId;
+        }
     }
 
 
@@ -95,14 +106,7 @@
     //         form.submit();
     // }
 
-    function sendDeleteFrm(){
-        if(confirm("삭제 하시겠습니까?")){
-        window.location.href = '/dinner/info/delete/'+reservationId;
-        }
-        else{
-                window.location.href = '/dinner/info/update/'+reservationId;
-        }
-    }
+
 
     /*]]>*/
 </script>
@@ -134,7 +138,7 @@
                                          <hr>
                                         <br>
                                         <div  style="height:400px; overflow-x:hidden;overflow-y:scroll;">
-                                        <input type="hidden" th:field="*{id}" id="idKey">
+                                        <input type="hidden" th:field="*{id}">
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <div class="form-floating mb-3 mb-md-0">
@@ -192,10 +196,11 @@
                                       <div style="margin-left:45%;">
                                        <button type="submit" class="btn btn-primary btn-block">submit</button>
                                           <span th:if="${session.ADMIN_ID!=null}">
-                                        <span class="btn btn-primary btn-block" id="deleteBtn" onclick="sendDeleteFrm();"> 삭제</span>
                                           </span>
                                      </form>
-                                    </span>
+                                <span class="btn btn-primary btn-block" id="deleteBtn" onclick="sendDeleteFrm();"> 삭제</span>
+
+                                </span>
                             </div>
 <!--                                <span th:if="${session.ADMIN_ID!=null}">-->
 <!--                                      <div style="margin-left:33%;">-->
