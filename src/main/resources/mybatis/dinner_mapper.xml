@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.visit.program.ReservationProgram.domain.repository.DinnerRepository">
+
+    <insert id="saveReservation" parameterType="com.visit.program.ReservationProgram.domain.dao.DinnerReservation" useGeneratedKeys="true" keyProperty="id">
+        insert into dinner_reservation(loginId,part_name,employee_name,phone_number,visit_date,contents,qty,password, write_date,is_checked)
+        values(#{loginId},#{part_name},#{employee_name},#{phone_number},#{visit_date},#{contents},#{qty},#{password}, #{write_date},#{is_checked})
+    </insert>
+
+    <select id="updateInfo">
+        update dinner_reservation set id=#{id},loginId=#{loginId},employee_name=#{employee_name},phone_number=#{phone_number},visit_date=#{visit_date},contents=#{contents},qty=#{qty},revised_write_date=#{revised_write_date} where id = #{id}
+    </select>
+    <select id="updateCheckedInfo">
+        update dinner_info set id=#{id},is_checked=1 where id = #{id}
+    </select>
+    <select id="updateCheckedReservation">
+        update dinner_reservation set is_checked=1, checked_date=#{checked_date} where id = #{id}
+    </select>
+
+    <select id="saveInfo">
+        insert into dinner_info(employee_id, dinner_reservation_id, is_checked) values(#{employee_id},#{dinner_reservation_id},#{is_checked})
+    </select>
+
+    <select id="findOne" resultType="com.visit.program.ReservationProgram.domain.dao.DinnerReservation">
+        select id,loginId, part_name, employee_name, phone_number, visit_date, contents, qty, password, write_date, revised_write_date, is_checked, checked_date
+        from dinner_reservation where id = #{id}
+    </select>
+
+    <select id="findByName" resultType="java.lang.String">
+        select employee_name from dinner_reservation where id = #{id}
+    </select>
+
+    <select id="findInfoOne" resultType="com.visit.program.ReservationProgram.domain.dao.DinnerInfo">
+        select* from dinner_info where id = #{id}
+    </select>
+
+    <select id="deleteDinnerInfo">
+        delete from dinner_info where id =  #{id}
+    </select>
+
+    <select id="deleteDinnerReservation">
+        delete from dinner_reservation where id =  #{id}
+    </select>
+
+    <select id="findAll" resultType="com.visit.program.ReservationProgram.domain.dao.DinnerReservationInfo">
+        select id,loginId,employee_name, qty, visit_date,write_date,is_checked from dinner_reservation where is_checked = 1 and month(STR_TO_DATE(#{visit_date}, '%Y-%m-%d')) =  month(now());
+    </select>
+
+      <select id = "findAllDTO" resultType="com.visit.program.ReservationProgram.domain.dao.DinnerReservationInfo">
+        select d1.id,d2.part_name,d2.loginId, d1.dinner_reservation_id, d2.id,
+               if(d2.qty-1 <![CDATA[ < ]]>1,d2.employee_name,concat(concat(d2.employee_name,' 외 '),concat(d2.qty-1,'명'))) as employee_name,d2.qty,
+             if(CHAR_LENGTH(d2.contents) <![CDATA[ <= ]]>8,d2.contents,concat(left(d2.contents,5),'..')) as contents
+               ,d2.visit_date,d2.write_date,d1.is_checked
+        from dinner_info d1 inner join dinner_reservation d2 on d1.id = d2.id
+        <where>
+            <if test="employee_name!=null and employee_name!=''">
+                and d2.employee_name like concat('%',#{employee_name},'%')
+            </if>
+            <if test="visit_date!=null and visit_date!=''">
+                and date(d2.visit_date)  = #{visit_date}
+            </if>
+        </where>
+        order by d1.id desc
+    </select>
+
+
+
+
+
+
+
+</mapper>
