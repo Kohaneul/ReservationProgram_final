@@ -56,8 +56,17 @@
             <if test="employee_name!=null and employee_name!=''">
                 and d2.employee_name like concat('%',#{employee_name},'%')
             </if>
-            <if test="visit_date!=null and visit_date!=''">
-                and date(d2.visit_date)  = #{visit_date}
+
+            <if test="visit_date1!=null and visit_date1!='' and visit_date2!=null and visit_date2!=''">
+                and date(d2.visit_date) between #{visit_date1} and #{visit_date2}
+            </if>
+
+            <if test="visit_date1!=null and visit_date1!=''">
+                and date(d2.visit_date) >= #{visit_date1}
+            </if>
+
+            <if test="visit_date2!=null and visit_date2!=''">
+                and date(d2.visit_date) <![CDATA[ <= ]]> #{visit_date2}
             </if>
         </where>
         order by d1.id desc

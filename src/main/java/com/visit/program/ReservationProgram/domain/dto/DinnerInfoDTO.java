@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 public class DinnerInfoDTO {
     private String employee_name;
-    private String visit_date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
+    private String visit_date1 = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    private String visit_date2;
 
 }

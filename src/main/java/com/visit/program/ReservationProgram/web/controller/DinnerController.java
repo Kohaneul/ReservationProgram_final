@@ -167,7 +167,7 @@ public class DinnerController {
         header.add("Content-Type","text/csv; charset=MS949");
         String fileName = LocalDateTime.now().toString().split("T")[0];
         header.add("Content-Disposition", "attachment;filename=\"" + fileName + ".csv\"");
-        List<DinnerReservationInfo> reservations = service.findAll(dinnerInfoDTO.getVisit_date());
+        List<DinnerReservationInfo> reservations = service.findAll(dinnerInfoDTO.getVisit_date1());
         return new ResponseEntity<>(content(reservations),header, HttpStatus.CREATED);
     }
 

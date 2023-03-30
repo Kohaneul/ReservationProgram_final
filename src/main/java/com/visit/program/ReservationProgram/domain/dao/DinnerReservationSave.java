@@ -31,6 +31,7 @@ public class DinnerReservationSave {
     private String passwordCheck;
     @NotEmpty
     private String visit_date;
+
     @NotNull
     @Range(min = 1, max = 7)
     private Integer qty;
@@ -45,7 +46,7 @@ public class DinnerReservationSave {
         this.password = password;
         this.passwordCheck = passwordCheck;
         this.visit_date = visit_date;
-        this.qty = 1;
+        this.qty = qty;
         this.contents = contents;
     }
 }
