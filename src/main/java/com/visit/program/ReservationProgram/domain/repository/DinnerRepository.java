@@ -17,8 +17,7 @@ public interface DinnerRepository {
     void updateCheckedInfo(DinnerInfoCheckedUpdate update);
     void updateCheckedReservation(DinnerReservationCheckedUpdate update);
 
-    void saveInfo(@Param("employee_id")Long employee_id,@Param("dinner_reservation_id")Long dinner_reservation_id,
-                  @Param("is_checked")Boolean is_checked);
+    Long saveInfo(DinnerInfo dinnerInfo);
     List<DinnerReservationInfo> findAllDTO(DinnerInfoDTO infoDTO);
 
     List<DinnerReservationInfo> findAll(@Param("visit_date") String visit_date);

@@ -142,7 +142,7 @@ public class ReservationInfoController {
         model.addAttribute("visitor",visitor);
         model.addAttribute("reservation", reservationInfo);
         session.removeAttribute(SessionConst.LOGIN_SUCCESS);
-
+        session.removeAttribute(SessionConst.DINNER_PROGRAM);
         return "view/ViewOne";
     }
 

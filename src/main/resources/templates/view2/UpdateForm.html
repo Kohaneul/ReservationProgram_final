@@ -65,12 +65,11 @@
                         }
                     }
                 }
-            }            console.log(visit_date);
+            }
         })};
 
 
     let reservationId = [[${reservation.id}]]
-
     function setCheck(){
         if(confirm("예약내역을 수정 하시겠습니까?")){
             let form = document.createElement('form');
@@ -81,8 +80,18 @@
         }
         else{
             window.location.href = '/dinner/info/update/'+reservationId;
+
         }
 
+    }
+
+
+    function setCheck(){
+            let form = document.createElement('form');
+            form.setAttribute('method','post');
+            form.setAttribute('action','/dinner/info/update/'+reservationId);
+            document.body.append(form);
+            form.submit();
     }
 
     function sendDeleteFrm(){
@@ -182,6 +191,7 @@
                                         </div>
                                     </div>
                                     </div>
+
                                 </form>
                             </div>
 

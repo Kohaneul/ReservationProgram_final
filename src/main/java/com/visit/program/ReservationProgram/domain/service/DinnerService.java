@@ -6,7 +6,6 @@ import com.visit.program.ReservationProgram.domain.repository.DinnerRepository;
 import com.visit.program.ReservationProgram.domain.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,10 +40,11 @@ public class DinnerService {
     }
 
     @Transactional
-    public void saveInfo(Long reservation_id,String loginId,Boolean is_checked){
-        Employee employee = employeeRepository.findByLoginId(loginId);
-        log.info("employee id={}",employee.getId());
-        repository.saveInfo(employee.getId(), reservation_id, is_checked);
+    public Long saveInfo(DinnerInfo dinnerInfo){
+      //  employee_id, dinner_reservation_id, is_checked
+        Employee employee = employeeRepository.findById(dinnerInfo.getEmployee_id());
+        Long saveInfoId = repository.saveInfo(dinnerInfo);
+        return saveInfoId;
     }
 
     @Transactional

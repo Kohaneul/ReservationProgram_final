@@ -2,6 +2,7 @@ package com.visit.program.ReservationProgram.domain.dao;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
@@ -12,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class DinnerReservationUpdate {
 
     @NotNull
@@ -41,6 +43,6 @@ public class DinnerReservationUpdate {
         this.visit_date = visit_date;
         this.contents = contents;
         this.qty = qty;
-        this.revised_write_date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy/MM/dd hh:mm")).toString();
+        this.revised_write_date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy/MM/dd HH:mm")).toString();
     }
 }

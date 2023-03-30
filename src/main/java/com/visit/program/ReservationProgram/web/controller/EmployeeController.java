@@ -24,8 +24,6 @@ public class EmployeeController {
         return "view/UpdatePassword";
     }
 
-
-
     private void setEmployee(Long id,UpdateEmployeeDTO employee){
         Employee employeeInfo = employeeService.findById(id);
         employee.setId(employeeInfo.getId());

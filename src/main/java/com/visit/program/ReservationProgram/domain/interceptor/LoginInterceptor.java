@@ -24,10 +24,9 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
         String requestURI = request.getRequestURI();
-        log.info("1. requestURI={}",requestURI);
         int i = requestURI.lastIndexOf("/");
         requestURI = requestURI.substring(i+1);
-        log.info("2. requestURI={}",requestURI);
+        log.info("requestURI={}",requestURI);
         if(session.getAttribute(SessionConst.LOGIN_SUCCESS)==null){
             if(session.getAttribute(SessionConst.DINNER_PROGRAM)!=null){
                 response.sendRedirect("/dinner/login/"+requestURI);//로그인 성공을 하지 못하면 로그인 페이지로 다시 돌아감

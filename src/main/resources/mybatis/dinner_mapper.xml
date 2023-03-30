@@ -17,9 +17,9 @@
         update dinner_reservation set is_checked=1, checked_date=#{checked_date} where id = #{id}
     </select>
 
-    <select id="saveInfo">
+    <insert id="saveInfo" parameterType="com.visit.program.ReservationProgram.domain.dao.DinnerReservation" useGeneratedKeys="true" keyProperty="id">
         insert into dinner_info(employee_id, dinner_reservation_id, is_checked) values(#{employee_id},#{dinner_reservation_id},#{is_checked})
-    </select>
+    </insert>
 
     <select id="findOne" resultType="com.visit.program.ReservationProgram.domain.dao.DinnerReservation">
         select id,loginId, part_name, employee_name, phone_number, visit_date, contents, qty, password, write_date, revised_write_date, is_checked, checked_date

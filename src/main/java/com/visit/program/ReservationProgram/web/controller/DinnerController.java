@@ -64,9 +64,9 @@ public class DinnerController {
         List<DinnerReservationInfo> reservations = service.findAllDTO(dinnerInfoDTO);
             model.addAttribute("reservations",reservations);
             if(session.getAttribute(SessionConst.ADMIN_ID)!=null){
-                return "/view2/All2";
+                return "view2/All2";
             }
-        return "/view2/All1";
+        return "view2/All1";
     }
 
     @GetMapping("/save")
@@ -90,7 +90,7 @@ public class DinnerController {
         log.info("hiddenValue={}",hiddenValue);
         reservationSave.setVisit_date(localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         model.addAttribute("hiddenValue",hiddenValue);
-     return "/view2/SaveForm";
+     return "view2/SaveForm";
     }
 
     @PostMapping("/save")
@@ -98,10 +98,11 @@ public class DinnerController {
 //        LocalDateTime nowDate = LocalDateTime.now();
 //        LocalDateTime reservationDate = LocalDateTime.parse(reservationSave.getVisit_date(),DateTimeFormatter.ofPattern("yyyy-MM-dd"));
      if(bindingResult.hasErrors()){
-         return "/view2/SaveForm";
+         return "view2/SaveForm";
      }
         Long savedId = service.save(reservationSave);
-        service.saveInfo(savedId, reservationSave.getLoginId(), false);
+        Employee employee = employeeService.findByLoginId(reservationSave.getLoginId());
+        service.saveInfo(new DinnerInfo(employee.getId(),savedId,false));
      return "redirect:/dinner/info/all";
     }
 
@@ -110,45 +111,41 @@ public class DinnerController {
     public String detailView(@PathVariable("id")Long id,Model model){
         DinnerReservation reservation = service.findOne(id);
         model.addAttribute("reservation",reservation);
-        return "/view2/ViewOne";
-    }
-    @GetMapping("/update/check/{id}")
-    public String checkUpdateId(@PathVariable("id")Long id, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        DinnerReservation before = service.findOne(id);
-        if(before.getIs_checked()){
-            ex(ErrorMessage.ALREADY_CHECKED_MSG,request,response);
-//            response.sendRedirect("/dinner/info/"+id);
-        }
-        return "redirect:/dinner/info/update/{id}";
+        return "view2/ViewOne";
     }
 
     private void ex(String message, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String referURL = request.getHeader("REFERER");
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter out = response.getWriter();
-        referURL=referURL.substring(referURL.indexOf("d")-1);
+        int i = referURL.lastIndexOf("/")+1;
+        referURL = referURL.substring(i,referURL.length());
+        log.info("referURL={}",referURL);
         out.println("<script>alert('"+message+"'); location.href='"+referURL+"';</script>");
         out.flush();
     }
 
 
     @GetMapping("/update/{id}")
-    public String updateView(@PathVariable("id")Long id, Model model, HttpServletResponse response) {
+    public String updateView(@PathVariable("id")Long id, Model model) {
+        log.info("updateView method1111");
         DinnerReservation before = service.findOne(id);
-
         DinnerReservationUpdate reservation = new DinnerReservationUpdate(before.getId(),before.getLoginId(),before.getEmployee_name(),before.getPhone_number(),before.getVisit_date(),before.getContents()
         ,before.getQty());
         model.addAttribute("reservation",reservation);
         model.addAttribute("hiddenValue",reservation.getVisit_date());
-            return "/view2/UpdateForm";
+            return "view2/UpdateForm";
 
 //        return "redirect:/dinner/info/{id}";
     }
 
     @PostMapping("/update/{id}")
     public String updateView2(@PathVariable("id")Long id,@Valid @ModelAttribute("reservation")DinnerReservationUpdate reservation,BindingResult bindingResult){
+        log.info("updateView method22222");
+
+
         if(bindingResult.hasErrors()){
-            return "/view2/UpdateForm";
+            return "view2/UpdateForm";
         }
         service.updateInfo(reservation);
         log.info("id={} 수정성공",reservation.getLoginId());
@@ -177,7 +174,6 @@ public class DinnerController {
     private String content(List<DinnerReservationInfo> employees){
         String data = "";
         data +="no, 아이디, 예약자 이름, 부서명, 총 인원, 예약일, 등록시간, 확인여부(미확인,확인)\n";
-
             for (int i = 0; i < employees.size(); i++) {
                 data += employees.get(i).getId() + ",";
                 data += employees.get(i).getLoginId() + ",";
