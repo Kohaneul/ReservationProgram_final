@@ -3,17 +3,24 @@ label input{
 }
 
 label{
-  padding-top:2%;
-  padding-left:1.5%;
+    padding-top:2%;
+    padding-left:1.5%;
 }
 .card-body{
     margin-top:-1.5%;
 }
+#searchBtn{
+    position: absolute;
+    top: -3px;
+    right: 15px;
+}
+
+
 #wrongPhoneNumber{
-  margin-top:-1%;
+    margin-top:-1%;
 }
 div.form-floating.mb-3.mb-md-0 input{
-  height:100% auto;
+    height:100% auto;
 }
 #qty{
     width:30%;
@@ -23,35 +30,37 @@ div.form-floating.mb-3.mb-md-0 input{
     margin-left:10%;
 }
 label{
-      position: absolute;
+    position: absolute;
     margin-top:-4pt;
     font-size:20px;
 }
 #fromTo{
-  margin-left:3%;
+    margin-left:3%;
 }
 
 input#visit_date1.form-control,input#visit_date2.form-control{
-  width:16%;
-  text-align:center;
-  margin-left:8.8%;
+    width:16%;
+    text-align:center;
+    margin-left:8.8%;
 }
 input#visit_date2.form-control{
-  margin-left:3%;
+    margin-left:3%;
 }
 
 input.form-control{
     margin-left: 18%;
     width:80%;
+    float:left;
+    z-index:1;
 }
 form{
-  margin-top:10px;
+    margin-top:10px;
 }
 #globalError{
     margin-left:5%;
 }
 #welcomeMsg{
-  position: absolute;
+    position: absolute;
     margin-left:1%;
     margin-top:-2%;
 }
@@ -73,8 +82,8 @@ div.row.mb-3{
 
 
 hr{
-  padding-bottom:1px;
-  margin-bottom:2%;
+    padding-bottom:1px;
+    margin-bottom:2%;
 }
 h4{
     margin-left:1%;
@@ -112,72 +121,72 @@ h4{
 }
 
 #phoneNumberLabel{
-  margin-top:-1.5%;
-  margin-left:20px;
+    margin-top:-1.5%;
+    margin-left:20px;
 }
 #employeeNameLabel{
-margin-left:46px;
+    margin-left:46px;
 }
 
 #nameLabel{
-margin-left:26px;
+    margin-left:26px;
 }
 
 #companyLabel{
-margin-left:43px;
+    margin-left:43px;
 }
 
 #area1{
-  margin-bottom:2%;
+    margin-bottom:2%;
 }
 
 input#company.form-control{
-  width:1234px;
-  margin-left:120px;
+    width:1234px;
+    margin-left:120px;
 }
 
 input#withPerson.form-control{
-  width:1234px;
-  margin-left:120px;
+    width:1234px;
+    margin-left:120px;
 }
 
 
 input#purpose.form-control{
-  width:1234px;
-  margin-left:120px;
+    width:1234px;
+    margin-left:120px;
 }
 #phone_number{
-  padding-top:1.4%;
-  padding-bottom:1.4%;
+    padding-top:1.4%;
+    padding-bottom:1.4%;
 }
 #area2{
-marin-top:1%;
+    marin-top:1%;
 }
 
 #withPersonLabel{
-margin-left:25px;
+    margin-left:25px;
 
 }
 
 #visitDateLabel{
-margin-left:1.5%;
-  margin-top:-1%;
+    margin-left:1.5%;
+    margin-top:-1%;
 
 }
 #visitDate2Label{
-margin-left:30px;
+    margin-left:30px;
 }
 
 #passwordCheckLabel{
-  margin-left:-6%;
-  font-size:19px;
+    margin-left:-6%;
+    font-size:19px;
 }
 
 #loginIdLabel{
-  margin-left:4%;}
+    margin-left:4%;}
 
 #passwordLabel{
-   margin-left:1.2%;
+    margin-left:1.2%;
 }
 
 

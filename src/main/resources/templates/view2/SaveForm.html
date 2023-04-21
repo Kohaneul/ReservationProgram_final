@@ -23,37 +23,60 @@
             margin-top:0.5%;
         }
 
+        #searchBtn{
+            position: absolute;
+            top: 7px;
+            right: 40px;
+        }
     </style>
 
 </head>
 <body class="bg-primary">
-
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
 <script th:inline="javascript">
     /*<![CDATA[*/
 
-     window.onload = function(){
-     loginIdInput();
-     passwordCheckInput();
-     visitDateInput();
+    function dataSend(){
+        let loginId = $("#loginId").val();
+
+        let sendDTO = {"loginId":loginId,"phone_number":null,"employee_name":null,"part_name":null};
+
+        $.ajax({
+            url: "/dinner/info/send",
+            data: JSON.stringify(sendDTO),
+            dataType: "json",
+            contentType: "application/json; charset=UTF",
+            type: 'POST',
+            success:function(data){
+                $("#loginId").val(data.loginId);
+                $("#phone_number").val(data.phone_number);
+                $("#employee_name").val(data.employee_name);
+                $("#part_name").val(data.part_name);
+
+            },
+            error:function(error){
+                alert("찾을 수 없습니다.");
+                $("#loginId").val("");
+                $("#phone_number").val("");
+                $("#employee_name").val("");
+                $("#part_name").val("");
+            }
+
+        });
+    }
+    /*]]>*/
+
+</script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    window.onload = function(){
+        passwordCheckInput();
+        visitDateInput();
     }
 
-
-    let employees = [[${employees}]]
-
-    function loginIdInput(){
-    document.getElementById('loginId').addEventListener('change',function(){
-    let loginId =  document.getElementById('loginId').value;
-    let employee = employees.find(e=>e.loginId.includes(loginId));
-    if(!employee){
-             alert('해당 아이디가 존재하지 않습니다.');
-             document.getElementById('loginId').value = "";}
-    else{
-        document.getElementById('employee_name').value = employee.employee_name;
-        document.getElementById('part_name').value = employee.part_name;
-        document.getElementById('phone_number').value = employee.phone_number;
-    }
-    })};
 
 
     function passwordCheckInput(){
@@ -100,8 +123,9 @@
 
         })};
 
- /*]]>*/
+    /*]]>*/
 </script>
+
 
 
 <div id="layoutAuthentication">
@@ -126,66 +150,67 @@
                                     </div>
                                     <div style="margin-top:1%;">
                                         <h4><b>석식 등록 정보 입력 </b><img th:src="@{/images/pencil.png}" width="25"/></h4>
-                                    <hr>
+                                        <hr>
                                         <br>
-                                        <div  style="height:380px; overflow-x:hidden;overflow-y:scroll;">
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <div class="form-floating mb-3 mb-md-0" title="그룹웨어 아이디를 입력해주세요">
-                                                <label th:for="loginId" id="loginIdLabel" >아이디</label>
-                                                <input type="text" th:field="*{loginId}" class="form-control"
-                                                       th:class="${#fields.hasErrors('loginId')}? 'form-control fieldError' : 'form-control'">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating mb-3 mb-md-0">
-                                                <label th:for="employee_name" id="employeeNameLabel">이름</label>
-                                                <input type="text" th:field="*{employee_name}" class="form-control"
-                                                       th:class="${#fields.hasErrors('employee_name')}? 'form-control fieldError' : 'form-control'">
-                                            </div>
-                                        </div>
-                                    </div>
-                                        <div class="row mb-3">
+                                        <div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3 mb-md-0" title="그룹웨어 아이디를 입력해주세요">
+                                                        <label th:for="loginId" id="loginIdLabel" >아이디</label>
+                                                        <input type="text" th:field="*{loginId}" id = "loginId" class="form-control"
+                                                               th:class="${#fields.hasErrors('loginId')}? 'form-control fieldError' : 'form-control'">
+                                                        <button type="button" class="btn btn-primary btn-block" onclick="dataSend()" id="searchBtn">조회</button>
+                                                    </div>
+                                                </div>
                                             <div class="col-md-6">
-                                                <div class="form-floating mb-3 mb-md-0">
-                                                    <label  th:for="part_name" id="partNameLabel">부서명</label>
-                                                    <input type="text" th:field="*{part_name}" class="form-control"
-                                                           th:class="${#fields.hasErrors('part_name')}? 'form-control fieldError' : 'form-control'">
+                                                    <div class="form-floating mb-3 mb-md-0">
+                                                        <label th:for="employee_name" id="employeeNameLabel">이름</label>
+                                                        <input type="text" th:field="*{employee_name}" class="form-control"
+                                                               th:class="${#fields.hasErrors('employee_name')}? 'form-control fieldError' : 'form-control'">
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating mb-3 mb-md-0">
-                                                    <label th:for="phone_number" id="phoneNumberLabel">휴대폰 번호</label>
-                                                    <input type="text" th:field="*{phone_number}" class="form-control"
-                                                           th:class="${#fields.hasErrors('phone_number')}? 'form-control fieldError' : 'form-control'">
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3 mb-md-0">
+                                                        <label  th:for="part_name" id="partNameLabel">부서명</label>
+                                                        <input type="text" th:field="*{part_name}" class="form-control"
+                                                               th:class="${#fields.hasErrors('part_name')}? 'form-control fieldError' : 'form-control'">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3 mb-md-0">
+                                                        <label th:for="phone_number" id="phoneNumberLabel">휴대폰 번호</label>
+                                                        <input type="text" th:field="*{phone_number}" class="form-control"
+                                                               th:class="${#fields.hasErrors('phone_number')}? 'form-control fieldError' : 'form-control'">
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <div class="form-floating mb-3 mb-md-0">
-                                                <label  th:for="password" id="passwordLabel">비밀번호</label>
-                                                <input type="password" th:field="*{password}" class="form-control"
-                                                       th:class="${#fields.hasErrors('password')}? 'form-control fieldError' : 'form-control'">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating mb-3 mb-md-0">
-                                                <label th:for="passwordCheck" id="passwordCheckLabel">비밀번호(확인)</label>
-                                                <input type="password" th:field="*{passwordCheck}" class="form-control"
-                                                       th:class="${#fields.hasErrors('passwordCheck')}? 'form-control fieldError' : 'form-control'">
-                                            </div>
-                                        </div>
-                                    </div>
-                                        <div class="row mb-3">
-                                            <div class="col-md-6">
-                                                <div class="form-floating mb-3 mb-md-0" title="원하는 날짜를 입력해주세요">
-                                                    <label th:for="visit_date" id="visitDateLabel" >날짜</label>
-                                                    <input type="date" th:field="*{visit_date}" class="form-control"
-                                                           th:class="${#fields.hasErrors('visit_date')}? 'form-control fieldError' : 'form-control'">
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3 mb-md-0">
+                                                        <label  th:for="password" id="passwordLabel">비밀번호</label>
+                                                        <input type="password" th:field="*{password}" class="form-control"
+                                                               th:class="${#fields.hasErrors('password')}? 'form-control fieldError' : 'form-control'">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3 mb-md-0">
+                                                        <label th:for="passwordCheck" id="passwordCheckLabel">비밀번호(확인)</label>
+                                                        <input type="password" th:field="*{passwordCheck}" class="form-control"
+                                                               th:class="${#fields.hasErrors('passwordCheck')}? 'form-control fieldError' : 'form-control'">
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating mb-3 mb-md-0" title="원하는 날짜를 입력해주세요">
+                                                        <label th:for="visit_date" id="visitDateLabel" >날짜</label>
+                                                        <input type="date" th:field="*{visit_date}" class="form-control"
+                                                               th:class="${#fields.hasErrors('visit_date')}? 'form-control fieldError' : 'form-control'">
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="row mb-3">
                                                 <div class="col-md-6">
                                                     <div class="form-floating mb-3 mb-md-0" title="인원수 입력">
@@ -195,29 +220,30 @@
                                                     </div>
                                                 </div>
                                             </div>
-<!--                                        <input type="hidden" th:field="*{qty}">-->
-                                        <div class="row mb-3">
-                                            <div>
-                                                <div class="form-floating mb-3 mb-md-0" title="내용 입력">
-                                                    <label th:for="contents" id="contents" > 내용</label>
-                                                    <input type="text" th:field="*{contents}" class="form-control"
-                                                           th:class="${#fields.hasErrors('contents')}? 'form-control fieldError' : 'form-control'">
+                                            <!--                                        <input type="hidden" th:field="*{qty}">-->
+                                            <div class="row mb-3">
+                                                <div>
+                                                    <div class="form-floating mb-3 mb-md-0" title="내용 입력">
+                                                        <label th:for="contents" id="contents" > 내용</label>
+                                                        <input type="text" th:field="*{contents}" class="form-control"
+                                                               th:class="${#fields.hasErrors('contents')}? 'form-control fieldError' : 'form-control'">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="mt-4 mb-0">
+                                            <div class="d-grid"><button type="submit" class="btn btn-primary btn-block">submit</button></div>
                                         </div>
-                                    <div class="mt-4 mb-0">
-                                        <div class="d-grid"><button type="submit" class="btn btn-primary btn-block">submit</button></div>
-                                    </div>
                                 </form>
-                        </div>
-                        </div>
-                            <div class="card-footer text-center py-3">
-                                <div class="small"><a th:href="@{/dinner/info/all}">HOME</a>
-                                </div>
                             </div>
                         </div>
+                        <div class="card-footer text-center py-3">
+                            <div class="small"><a th:href="@{/dinner/info/all}">HOME</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
         </main>
     </div>
 

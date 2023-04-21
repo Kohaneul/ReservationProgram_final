@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,15 +39,19 @@ public class DinnerController {
     private final DinnerService service;
     private final EmployeeService employeeService;
 
+    private String empName;
+    private String startDate;
+    private String endDate;
+
     @ModelAttribute(name="renewDate")
     public String renewDate(){
         return  LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy/MM/dd HH:mm:ss"));
     }
 
-    @ModelAttribute(name="employees")
-    public List<Employee> employees(){
-        return employeeService.findAll();
-    }
+//    @ModelAttribute(name="employees")
+//    public List<Employee> employees(){
+//        return employeeService.findAll();
+//    }
 
     @GetMapping("/rapigen")
     public String enterPage(HttpSession session){
@@ -61,44 +66,60 @@ public class DinnerController {
     @GetMapping("/all")
     public String save(@ModelAttribute("reservationDTO")DinnerInfoDTO dinnerInfoDTO, Model model, HttpSession session){
         List<DinnerReservationInfo> reservations = service.findAllDTO(dinnerInfoDTO);
-            model.addAttribute("reservations",reservations);
-            if(session.getAttribute(SessionConst.ADMIN_ID)!=null){
-                return "view2/All2";
-            }
+        model.addAttribute("reservations",reservations);
+        if(session.getAttribute(SessionConst.ADMIN_ID)!=null){
+            return "view2/All2";
+        }
+        empName = dinnerInfoDTO.getEmployee_name();
+        startDate=dinnerInfoDTO.getVisit_date1();
+        endDate = dinnerInfoDTO.getVisit_date2();
         return "view2/All1";
     }
+
 
     @GetMapping("/save")
     public String save(@ModelAttribute("reservationSave")DinnerReservationSave reservationSave,Model model){
         LocalDateTime localDateTime = LocalDateTime.now();
-        if(localDateTime.getDayOfWeek().toString().equals("FRIDAY")){
-            localDateTime = localDateTime.plusDays(3);
-        }
-        if(localDateTime.getDayOfWeek().toString().equals("SATURDAY")){
-            localDateTime = localDateTime.plusDays(2);
-        }
-        else{
-            if(localDateTime.getHour()<13){
-                localDateTime = localDateTime.plusDays(1);
-            }
-            else{
-                localDateTime = localDateTime.plusDays(2);
-            }
-        }
         String hiddenValue = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         log.info("hiddenValue={}",hiddenValue);
         reservationSave.setVisit_date(localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         model.addAttribute("hiddenValue",hiddenValue);
-     return "view2/SaveForm";
+        return "view2/SaveForm";
     }
 
+    /*
+        @GetMapping("/save")
+        public String save(@ModelAttribute("reservationSave")DinnerReservationSave reservationSave,Model model){
+            LocalDateTime localDateTime = LocalDateTime.now();
+            if(localDateTime.getDayOfWeek().toString().equals("FRIDAY")){
+                localDateTime = localDateTime.plusDays(3);
+        if(localDateTime.getHour()>=13){
+        localDateTime = localDateTime.plusDays(1);
+        }
+            }
+
+            else{
+                if(localDateTime.getHour()<13){
+                    localDateTime = localDateTime.plusDays(1);
+                }
+                else{
+                    localDateTime = localDateTime.plusDays(2);
+                }
+            }
+            String hiddenValue = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            log.info("hiddenValue={}",hiddenValue);
+            reservationSave.setVisit_date(localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            model.addAttribute("hiddenValue",hiddenValue);
+         return "view2/SaveForm";
+        }
+    */
     @PostMapping("/save")
     public String save(@Valid @ModelAttribute("reservationSave")DinnerReservationSave reservationSave, BindingResult bindingResult){
 //        LocalDateTime nowDate = LocalDateTime.now();
 //        LocalDateTime reservationDate = LocalDateTime.parse(reservationSave.getVisit_date(),DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-     if(bindingResult.hasErrors()){
-         return "view2/SaveForm";
-     }
+        if(bindingResult.hasErrors()){
+            return "view2/SaveForm";
+        }
         Long savedId = service.save(reservationSave);
         Employee employee = employeeService.findByLoginId(reservationSave.getLoginId());
         service.saveInfo(new SaveDinnerInfo(employee.getId(), savedId, false));
@@ -127,8 +148,17 @@ public class DinnerController {
         return "view2/ViewOne";
     }
 
+    @PostMapping("/send")
+    @ResponseBody
+    public HashMap<String,Object> send(@RequestBody HashMap<String,Object> sendDTO){
+        String loginId = (String) sendDTO.get("loginId");
+        Employee employee = employeeService.findByLoginId(loginId);
+        sendDTO.replace("phone_number",employee.getPhone_number());
+        sendDTO.replace("employee_name",employee.getEmployee_name());
+        sendDTO.replace("part_name",employee.getPart_name());
 
-
+        return sendDTO;
+    }
 
     @GetMapping("/update/{id}")
     public String updateView(@PathVariable("id")Long id, Model model,HttpServletRequest request){
@@ -163,32 +193,46 @@ public class DinnerController {
         return "redirect:/dinner/info/all";
     }
 
+
+
     @RequestMapping("/download")
-    public ResponseEntity<String> downLoadCSV(@ModelAttribute("reservationDTO")DinnerInfoDTO dinnerInfoDTO){
+    public ResponseEntity<String> downLoadCSV(){
+        log.info("empName={},startDate={},end={}",empName,startDate,endDate);
         HttpHeaders header = new HttpHeaders();
         LocalDateTime now = LocalDateTime.now();
         header.add("Content-Type","text/csv; charset=MS949");
-        String fileName = LocalDateTime.now().toString().split("T")[0];
+        String fileName = "Dinner["+LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMdd"))+"]";
         header.add("Content-Disposition", "attachment;filename=\"" + fileName + ".csv\"");
-        List<DinnerReservationInfo> reservations = service.findAll(dinnerInfoDTO.getVisit_date1());
+        List<DinnerReservationInfo> reservations = service.findAllDTO(new DinnerInfoDTO(empName,startDate,endDate));
         return new ResponseEntity<>(content(reservations),header, HttpStatus.CREATED);
     }
 
+    /*
+        @RequestMapping("/download")
+        public ResponseEntity<String> downLoadCSV(@ModelAttribute("reservationDTO")DinnerInfoDTO dinnerInfoDTO){
+            HttpHeaders header = new HttpHeaders();
+            header.add("Content-Type","text/csv; charset=MS949");
+            String fileName = "Dinner["+LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMdd"))+"]";
+            header.add("Content-Disposition", "attachment;filename=\"" + fileName + ".csv\"");
+            List<DinnerReservationInfo> reservations = service.findAll();
+            return new ResponseEntity<>(content(reservations),header, HttpStatus.CREATED);
+        }
+    */
     private String content(List<DinnerReservationInfo> employees){
         String data = "";
-        data +="no, 아이디, 예약자 이름, 부서명, 총 인원, 예약일, 등록시간, 확인여부(미확인,확인)\n";
-            for (int i = 0; i < employees.size(); i++) {
-                data += employees.get(i).getId() + ",";
-                data += employees.get(i).getLoginId() + ",";
-                data += employees.get(i).getEmployee_name() + ",";
-                data += employees.get(i).getPart_name() + ",";
-                data += employees.get(i).getQty() + ",";
-                data += employees.get(i).getVisit_date() + ",";
-                data += employees.get(i).getWrite_date() + ",";
-                data += employees.get(i).getIs_checked() + "\n";
-            }
-            return data;
+        data +="구분, no, 예약일, 인원, 소속 부서, 예약자, 등록 시간, 확인여부(미확인,확인)\n";
+        for (int i = 0; i < employees.size(); i++) {
+            data += "석식 예약"+",";
+            data += (i+1)+ ",";
+            data += employees.get(i).getVisit_date() + ",";
+            data += employees.get(i).getQty() + ",";
+            data += employees.get(i).getPart_name() + ",";
+            data += employees.get(i).getEmployee_name() + ",";
+            data += employees.get(i).getWrite_date() + ",";
+            data += employees.get(i).getIs_checked() + "\n";
         }
+        return data;
+    }
     @GetMapping("/click/{id}")
     public String checkDinner(@PathVariable("id")Long id){
         DinnerReservation reservation = service.findOne(id);
@@ -208,6 +252,4 @@ public class DinnerController {
     }
 
 
-    }
-
-
+}

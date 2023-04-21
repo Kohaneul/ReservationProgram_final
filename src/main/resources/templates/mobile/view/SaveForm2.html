@@ -17,6 +17,39 @@
 </head>
 <body class="bg-primary">
 
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    function dataSend(){
+        let loginId = $("#loginId").val();
+        let sendDTO = {"loginId":loginId,"employee_name":null};
+        $.ajax({
+            url: "/reservation/info/send",
+            data: JSON.stringify(sendDTO),
+            dataType: "json",
+            contentType: "application/json; charset=UTF",
+            type: 'POST',
+            success:function(data){
+                $("#loginId").val(data.loginId);
+                $("#employee_name").val(data.employee_name);
+            },
+            error:function(error){
+                alert("찾을 수 없습니다.");
+                $("#loginId").val("");
+                $("#employee_name").val("");
+            }
+
+        });
+    }
+    /*]]>*/
+
+</script>
+
+
+
 <script th:inline="javascript">
     /*<![CDATA[*/
 
@@ -31,27 +64,12 @@
 
 
     window.onload = function(){
-    loginIdInput();
     passwordCheckInput();
     visit1DateInput();
     visit2DateInput();
     };
 
 
-    let employees = [[${employees}]]
-
-
-    function loginIdInput(){
-    document.getElementById('loginId').addEventListener('change',function(){
-    let loginId =  document.getElementById('loginId').value;
-     let employee = employees.find(e=>e.loginId.includes(loginId));
-    if(!employee){
-             alert('해당 아이디가 존재하지 않습니다.');
-             document.getElementById('loginId').value = "";}
-    else{
-        document.getElementById('employee_name').value = employee.employee_name;
-    }
-    })};
 
 
     function passwordCheckInput(){
@@ -182,6 +200,8 @@
                                                 <label th:for="loginId">아이디</label>
                                                 <input type="text" th:field="*{loginId}" class="form-control"
                                                        th:class="${#fields.hasErrors('loginId')}? 'form-control fieldError' : 'form-control'">
+                                                <button type="button" class="btn btn-primary btn-block" onclick="dataSend()" id="searchBtn">조회</button>
+
                                             </div>
                                         </div>
                                         <div class="col-md-6">

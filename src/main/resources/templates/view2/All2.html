@@ -53,13 +53,13 @@
                                 </h3>
 
                                 </div>
-                             <div id="AllContents">
+                                <div id="AllContents">
                                 <span id="renewDateArea" title="새로고침은 F5">
                                     <span th:text="|현재 : ${renewDate} |"></span>
                                 </span>
-                                <div id="sortTab2">
-                                    <div>
-                                        <form th:object="${reservationDTO}" class="form-inline" name="sendfrm" >
+                                    <div id="sortTab2">
+                                        <div>
+                                            <form th:object="${reservationDTO}" class="form-inline" name="sendfrm" >
                                             <span class="form-group mb-2" id="sortId">
                                                 <span id = "DTO1">
                                               <input type="text" id="employee_name" th:field="*{employee_name}" placeholder="방문자 이름 입력"/>
@@ -67,68 +67,68 @@
                                                     <input type="date" id="date2" th:field="*{visit_date2}"/>                                                </span>
                                                 <button type="submit" class="btn btn-primary mb-2">검색</button>
                                             </span>
-                                         </form>
+                                            </form>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="card-body">
                                     <div class="card-body">
-                                        <div class="card mb-4">
-                                            <div class="card-header">
+                                        <div class="card-body">
+                                            <div class="card mb-4">
+                                                <div class="card-header">
                                                 <span>
                                                 <i class="fas fa-table me-1"> </i>
                                                 석식 예약 리스트(관리자페이지)
                                                 </span>
-                                            </div>
+                                                </div>
 
-                                            <table id="datatablesSimple">
-                                                <thead>
-                                                <tr>
-                                                    <th class = "reservation_id">no</th>
-                                                    <th class = "employee_name">예약자</th>
-                                                    <th class = "qty">총 인원</th>
-                                                    <th class = "contents">내용</th>
-                                                    <th class = "visit_date">예약일</th>
-                                                    <th class = "write_date">등록일자</th>
-                                                    <th class = "is_checked">결과</th>
-                                                    <th class = "detailView"></th>
-                                                </tr>
-                                                </thead>
-                                                <div th:if="${reservations.size()>0}">
-                                                    <tbody>
-                                                    <tr th:each="reservation,i : ${reservations}">
-                                                        <td class = "reservation_id" th:text="${i.count}"></td>
-                                                        <td class = "employee_name" th:text="${reservation.employee_name}"></td>
-                                                        <td class = "qty" th:text="${reservation.qty}"></td>
-                                                        <td class = "contents" th:text="${reservation.contents}"></td>
-                                                        <td class = "visit_date" th:text="${reservation.visit_date}"></td>
-                                                        <td class = "write_date" th:text="${reservation.write_date}"></td>
-                                                        <td>
+                                                <table id="datatablesSimple">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class = "reservation_id">no</th>
+                                                        <th class = "employee_name">예약자</th>
+                                                        <th class = "qty">총 인원</th>
+                                                        <th class = "contents">내용</th>
+                                                        <th class = "visit_date">예약일</th>
+                                                        <th class = "write_date">등록일자</th>
+                                                        <th class = "is_checked">결과</th>
+                                                        <th class = "detailView"></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <div th:if="${reservations.size()>0}">
+                                                        <tbody>
+                                                        <tr th:each="reservation,i : ${reservations}">
+                                                            <td class = "reservation_id" th:text="${i.count}"></td>
+                                                            <td class = "employee_name" th:text="${reservation.employee_name}"></td>
+                                                            <td class = "qty" th:text="${reservation.qty}"></td>
+                                                            <td class = "contents" th:text="${reservation.contents}"></td>
+                                                            <td class = "visit_date" th:text="${reservation.visit_date}"></td>
+                                                            <td class = "write_date" th:text="${reservation.write_date}"></td>
+                                                            <td>
                                                             <span th:if="${reservation.is_checked==true}">
                                                             <input type="checkbox" th:checked= "${reservation.is_checked}" disabled>
                                                             </span>
-                                                            <span th:if="${reservation.is_checked==false}">
+                                                                <span th:if="${reservation.is_checked==false}">
                                                                 <input type="checkbox" name = "ckval" th:checked = "${reservation.is_checked}" th:id ="${reservation.id}"
                                                                        th:ckval="${reservation.id}"  th:onclick="setCheck(this.getAttribute('ckval'));">
                                                             </span>
-                                                        </td>
-                                                        <td><a th:href="@{/dinner/info/{id} (id=${reservation.id})}" role="button" class = "detailView">상세보기</a></td>
-                                                    </tr>
-                                                    </tbody>
-                                                </div>
-                                            </table>
-                                            <span id = "dataIsNull" th:if="${reservations.size()<1}">
+                                                            </td>
+                                                            <td><a th:href="@{/dinner/info/{id} (id=${reservation.id})}" role="button" class = "detailView">상세보기</a></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </div>
+                                                </table>
+                                                <span id = "dataIsNull" th:if="${reservations.size()<1}">
                                             <h2>데이터가 존재하지 않습니다.</h2>
                                             </span>
-                                             </div>
-                                        <div id="btnArea2">
-                                            <br>
-<!--                                            <a th:href="@{/dinner/info/save}"> <button class="btn btn-primary btn-block"> 신규등록 </button></a>-->
-                                            <a th:href="@{/dinner/info/download}"> <button class="btn btn-primary btn-block"> DownLoad(EXCEL)</button></a>
-                                            <a th:href="@{/dinner/info/admin/logOut}"> <button class="btn btn-primary btn-block" style="background-color: black;  border:none;"> 관리자계정(로그아웃) </button></a>
+                                            </div>
+                                            <div id="btnArea2">
+                                                <br>
+                                                <!--                                            <a th:href="@{/dinner/info/save}"> <button class="btn btn-primary btn-block"> 신규등록 </button></a>-->
+                                                <a th:href="@{/dinner/info/download}"> <button class="btn btn-primary btn-block"> DownLoad(EXCEL)</button></a>
+                                                <a th:href="@{/dinner/info/admin/logOut}"> <button class="btn btn-primary btn-block" style="background-color: black;  border:none;"> 관리자계정(로그아웃) </button></a>
 
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                                 </div>
                                 <div class="card-footer text-center py-3">
                                     <span class="small"><a th:href="@{/dinner/info/all}">HOME</a></span>

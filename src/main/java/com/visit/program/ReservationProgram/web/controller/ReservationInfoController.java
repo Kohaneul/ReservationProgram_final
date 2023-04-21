@@ -25,6 +25,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -44,10 +45,6 @@ public class ReservationInfoController {
       return  LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy/MM/dd hh:mm:ss"));
     }
 
-    @ModelAttribute(name="employees")
-    public List<Employee> employees(){
-        return employeeService.findAll();
-    }
     @GetMapping("/{employee_id}/all")
     public String viewMyVisitors(@PathVariable("employee_id") Long employee_id, @ModelAttribute("reservationDTO") MyReservationDTO reservationDTO, Model model
     ){
@@ -132,7 +129,17 @@ public class ReservationInfoController {
         referURL=referURL.substring(referURL.indexOf("r")-1);
         return referURL;
     }
+    @PostMapping("/send")
+    @ResponseBody
+    public HashMap<String,Object> send(@RequestBody HashMap<String,Object> sendDTO){
+        String loginId = (String) sendDTO.get("loginId");
+        Employee employee = employeeService.findByLoginId(loginId);
+        sendDTO.replace("phone_number",employee.getPhone_number());
+        sendDTO.replace("employee_name",employee.getEmployee_name());
+        sendDTO.replace("part_name",employee.getPart_name());
+        return sendDTO;
 
+    }
 
     @GetMapping("/{id}")
     public String viewReservationOne(@PathVariable(name = "id") Long id, Model model,HttpSession session) {

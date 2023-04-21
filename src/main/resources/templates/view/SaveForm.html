@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 
-<link rel="stylesheet" type="text/css" th:href="@{/css/Error.css}"/>
-<link rel="stylesheet" type="text/css" th:href="@{/css/SaveForm.css}"/>
-<link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}"/>
+<link rel="stylesheet" type="text/css" href="/css/Error.css"/>
+<link rel="stylesheet" type="text/css" href="/css/SaveForm.css"/>
+<link rel="stylesheet" type="text/css" href="/css/styles.css"/>
 <title>방문자 등록 Form</title>
 <head>
     <meta charset="utf-8" />
@@ -16,53 +16,59 @@
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 <body class="bg-primary">
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
 <script th:inline="javascript">
     /*<![CDATA[*/
 
+    function dataSend(){
+        let loginId = $("#loginId").val();
+        let sendDTO = {"loginId":loginId,"employee_name":null};
+        $.ajax({
+            url: "/reservation/info/send",
+            data: JSON.stringify(sendDTO),
+            dataType: "json",
+            contentType: "application/json; charset=UTF",
+            type: 'POST',
+            success:function(data){
+                $("#loginId").val(data.loginId);
+                $("#employee_name").val(data.employee_name);
+            },
+            error:function(error){
+                alert("찾을 수 없습니다.");
+                $("#loginId").val("");
+                $("#employee_name").val("");
+            }
+
+        });
+    }
+    /*]]>*/
+
+</script>
+
+<script>
+    /*<![CDATA[*/
+
     function setCheck(){
-    alert('예약내역을 등록하였습니다.(5번까지 수정가능)');
-
-<!--        if(confirm("예약내역을 등록 하시겠습니까?(5번까지 수정가능)")){-->
-<!--              window.location.href = '/reservation/info/all';-->
-<!--        }-->
-
+        alert('예약내역을 등록하였습니다.(5번까지 수정가능)');
     }
 
 
     window.onload = function(){
-    loginIdInput();
-    passwordCheckInput();
-    visit1DateInput();
-    visit2DateInput();
+        passwordCheckInput();
+        visit1DateInput();
+        visit2DateInput();
     };
 
-
-    let employees = [[${employees}]]
-
-
-    function loginIdInput(){
-    document.getElementById('loginId').addEventListener('change',function(){
-    let loginId =  document.getElementById('loginId').value;
-     let employee = employees.find(e=>e.loginId.includes(loginId));
-    if(!employee){
-             alert('해당 아이디가 존재하지 않습니다.');
-             document.getElementById('loginId').value = "";}
-    else{
-        document.getElementById('employee_name').value = employee.employee_name;
-    }
-    })};
-
-
     function passwordCheckInput(){
-    document.getElementById('passwordCheck').addEventListener('change',function(){
-          let password1 =  document.getElementById('password').value;
-          let password2 =  document.getElementById('passwordCheck').value;
+        document.getElementById('passwordCheck').addEventListener('change',function(){
+            let password1 =  document.getElementById('password').value;
+            let password2 =  document.getElementById('passwordCheck').value;
             if(password1 !=password2){
-            alert('비밀번호가 일치하지 않습니다. 다시 확인해주세요');
-                         document.getElementById('passwordCheck').value = "";
-                         }
-            })
+                alert('비밀번호가 일치하지 않습니다. 다시 확인해주세요');
+                document.getElementById('passwordCheck').value = "";
+            }
+        })
     };
 
     let today = new Date();
@@ -73,76 +79,76 @@
 
 
     function visit1DateInput(){
-    document.getElementById('visit_date1').addEventListener('change',function(){
-    let visit_date1 = document.getElementById('visit_date1').value;
-    let inputYear = Number(visit_date1.substr(0,visit_date1.indexOf('-')));
-    let inputMonth = Number(visit_date1.split('-')[1]);
-    let inputDay = Number(visit_date1.split('-')[2]);
+        document.getElementById('visit_date1').addEventListener('change',function(){
+            let visit_date1 = document.getElementById('visit_date1').value;
+            let inputYear = Number(visit_date1.substr(0,visit_date1.indexOf('-')));
+            let inputMonth = Number(visit_date1.split('-')[1]);
+            let inputDay = Number(visit_date1.split('-')[2]);
 
-    if(inputYear<=year){
-        if(inputYear<year){
-           alert('방문일정이 현재 날짜 '+date+' 보다 전일 수는 없습니다.');
-           document.getElementById('visit_date1').value = "";
-        }
-        else{
-          if(inputMonth<month){
-            alert('방문일정이 현재 날짜 '+date+' 보다 전일 수는 없습니다.');
-            document.getElementById('visit_date1').value = "";
-            }
-            if(inputMonth==month){
-                if(inputDay<day){
-              alert('방문일정이 현재 일자 '+date+' 보다 전일 수는 없습니다.');
-              document.getElementById('visit_date1').value = "";
+            if(inputYear<=year){
+                if(inputYear<year){
+                    alert('방문일정이 현재 날짜 '+date+' 보다 전일 수는 없습니다.');
+                    document.getElementById('visit_date1').value = "";
+                }
+                else{
+                    if(inputMonth<month){
+                        alert('방문일정이 현재 날짜 '+date+' 보다 전일 수는 없습니다.');
+                        document.getElementById('visit_date1').value = "";
+                    }
+                    if(inputMonth==month){
+                        if(inputDay<day){
+                            alert('방문일정이 현재 일자 '+date+' 보다 전일 수는 없습니다.');
+                            document.getElementById('visit_date1').value = "";
+                        }
+                    }
                 }
             }
-        }
-    }
-                 document.getElementById('visit_date2').value = document.getElementById('visit_date1').value;
+            document.getElementById('visit_date2').value = document.getElementById('visit_date1').value;
 
 
         })};
 
     function visit2DateInput(){
 
-      document.getElementById('visit_date2').addEventListener('change',function(){
+        document.getElementById('visit_date2').addEventListener('change',function(){
 
-        let visit_date2 =  document.getElementById('visit_date2').value;
-        let inputMonth2 = Number(visit_date2.split('-')[1]);
-        let inputDay2 = Number(visit_date2.split('-')[2]);
-        let inputYear2 = Number(visit_date2.substr(0,visit_date2.indexOf('-')));
-        let visit_date1 =  document.getElementById('visit_date1').value;
+            let visit_date2 =  document.getElementById('visit_date2').value;
+            let inputMonth2 = Number(visit_date2.split('-')[1]);
+            let inputDay2 = Number(visit_date2.split('-')[2]);
+            let inputYear2 = Number(visit_date2.substr(0,visit_date2.indexOf('-')));
+            let visit_date1 =  document.getElementById('visit_date1').value;
 
-        let inputYear1 = Number(visit_date1.substr(0,visit_date1.indexOf('-')));
-        let inputMonth1 = Number(visit_date1.split('-')[1]);
-        let inputDay1 = Number(visit_date1.split('-')[2]);
+            let inputYear1 = Number(visit_date1.substr(0,visit_date1.indexOf('-')));
+            let inputMonth1 = Number(visit_date1.split('-')[1]);
+            let inputDay1 = Number(visit_date1.split('-')[2]);
 
-        if(inputYear2<inputYear1){
-              alert('방문일정 종료일이 현재 방문일정 시작일 보다 전일 수는 없습니다.');
-               document.getElementById('visit_date2').value = "";
-        if(inputMonth2<month){
-            alert('방문일정이 현재 날짜 '+date+' 보다 전일 수는 없습니다.');
-            document.getElementById('visit_date2').value = "";
-        }
-        if(inputMonth2==month){
-           if(inputDay2<day){
-              alert('방문일정이 현재 일자 '+date+' 보다 전일 수는 없습니다.');
-              document.getElementById('visit_date2').value = "";
-              }
-         }
-         }
-         else{
-        console.log(inputMonth1);
-           if(inputMonth2<inputMonth1){
-              alert('방문일정 종료일이 현재 방문일정 시작일 보다 전일 수는 없습니다.');
-            document.getElementById('visit_date2').value = "";
-        }
-        if(inputMonth2==inputMonth1){
-           if(inputDay2<inputDay1){
-              alert('방문일정 종료일이 현재 방문일정 시작일 보다 전일 수는 없습니다.');
-              document.getElementById('visit_date2').value = "";
-              }
-         }
-         }
+            if(inputYear2<inputYear1){
+                alert('방문일정 종료일이 현재 방문일정 시작일 보다 전일 수는 없습니다.');
+                document.getElementById('visit_date2').value = "";
+                if(inputMonth2<month){
+                    alert('방문일정이 현재 날짜 '+date+' 보다 전일 수는 없습니다.');
+                    document.getElementById('visit_date2').value = "";
+                }
+                if(inputMonth2==month){
+                    if(inputDay2<day){
+                        alert('방문일정이 현재 일자 '+date+' 보다 전일 수는 없습니다.');
+                        document.getElementById('visit_date2').value = "";
+                    }
+                }
+            }
+            else{
+                console.log(inputMonth1);
+                if(inputMonth2<inputMonth1){
+                    alert('방문일정 종료일이 현재 방문일정 시작일 보다 전일 수는 없습니다.');
+                    document.getElementById('visit_date2').value = "";
+                }
+                if(inputMonth2==inputMonth1){
+                    if(inputDay2<inputDay1){
+                        alert('방문일정 종료일이 현재 방문일정 시작일 보다 전일 수는 없습니다.');
+                        document.getElementById('visit_date2').value = "";
+                    }
+                }
+            }
 
 
         })};
@@ -158,87 +164,76 @@
                     <div class="col-lg-7">
                         <div class="card shadow-lg border-0 rounded-lg mt-5">
                             <div class="card-header"><h3 class="text-center font-weight-light my-4">
-                                <img th:src="@{/images/rapigen_logo.png}" width="180"/>          방문 예약 등록
+                                <img src="/images/rapigen_logo.png" width="180"/>          방문 예약 등록
                             </h3>
                             </div>
                             <div class="card-body">
-                                <form role="form" th:object="${visitor}" method="post" name="sendFrm">
+                                <form role="form" method="post" name="sendFrm">
                                     <div id="errorArea">
-                                        <span th:if="${#fields.hasGlobalErrors()}">
-                                            <p class="field-error" id="globalError" th:text="${errorMsg}"></p>
-                                        </span>
-                                        <span th:if="${wrongPhoneNumber!=null}">
-                                            <p class="field-error" id="wrongPhoneNumber" th:text="${wrongPhoneNumber}"></p>
-                                        </span>
                                     </div>
                                     <div id="area1">
-                                        <h4><b>접견자 정보  </b><img th:src="@{/images/pencil.png}" width="25"/></h4>
-                                    <hr>
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <div class="form-floating mb-3 mb-md-0" title="그룹웨어 아이디를 입력해주세요">
-                                                <label th:for="loginId" id="loginIdLabel" >아이디 :</label>
-                                                <input type="text" th:field="*{loginId}" class="form-control"
-                                                       th:class="${#fields.hasErrors('loginId')}? 'form-control fieldError' : 'form-control'">
+                                        <h4><b>접견자 정보  </b><img src="/images/pencil.png" width="25"/></h4>
+                                        <hr>
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3 mb-md-0" title="그룹웨어 아이디를 입력해주세요">
+                                                    <label for="loginId" id="loginIdLabel" >아이디 :</label>
+                                                    <input type="text" class="form-control" id="loginId" name="loginId" value="">
+                                                    <button type="button" class="btn btn-primary btn-block" onclick="dataSend()" id="searchBtn">조회</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3 mb-md-0">
+                                                    <label for="employee_name" id="employeeNameLabel">이름 :</label>
+                                                    <input type="text" class="form-control" id="employee_name" name="employee_name" value="">
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating mb-3 mb-md-0">
-                                                <label th:for="employee_name" id="employeeNameLabel">이름 :</label>
-                                                <input type="text" th:field="*{employee_name}" class="form-control"
-                                                       th:class="${#fields.hasErrors('employee_name')}? 'form-control fieldError' : 'form-control'">
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3 mb-md-0">
+                                                    <label  for="password" id="passwordLabel">비밀번호 : </label>
+                                                    <input type="password" class="form-control" id="password" name="password" value="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3 mb-md-0">
+                                                    <label for="passwordCheck" id="passwordCheckLabel">비밀번호(확인) : </label>
+                                                    <input type="password" class="form-control" id="passwordCheck" name="passwordCheck" value="">
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <div class="form-floating mb-3 mb-md-0">
-                                                <label  th:for="password" id="passwordLabel">비밀번호 : </label>
-                                                <input type="password" th:field="*{password}" class="form-control"
-                                                       th:class="${#fields.hasErrors('password')}? 'form-control fieldError' : 'form-control'">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating mb-3 mb-md-0">
-                                                <label th:for="passwordCheck" id="passwordCheckLabel">비밀번호(확인) : </label>
-                                                <input type="password" th:field="*{passwordCheck}" class="form-control"
-                                                       th:class="${#fields.hasErrors('passwordCheck')}? 'form-control fieldError' : 'form-control'">
-                                            </div>
-                                        </div>
-                                    </div>
                                     </div>
                                     <div id="area2">
-                                        <h4><b>방문자 정보  </b><img th:src="@{/images/pencil.png}" width="25"/></h4>
+                                        <h4><b>방문자 정보  </b><img src="/images/pencil.png" width="25"/></h4>
                                         <hr>
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <div class="form-floating mb-3 mb-md-0" title="방문자 이름을 입력해주세요">
-                                                    <label  th:for="name" id="nameLabel">방문자 : </label>
-                                                    <input type="text" th:field="*{name}" class="form-control"
-                                                           th:class="${#fields.hasErrors('name')}? 'form-control fieldError' : 'form-control'">
+                                                    <label  for="name" id="nameLabel">방문자 : </label>
+                                                    <input type="text" class="form-control" id="name" name="name" value="">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3 mb-md-0">
-                                                    <label th:for="phone_number" id="phoneNumberLabel">연락처 : </label>
-                                                    <input type="text" th:field="*{phone_number}" class="form-control" placeholder=" - 을 제외한 형태로 적어주세요"
-                                                           th:class="${#fields.hasErrors('phone_number')}? 'form-control fieldError' : 'form-control'">
+                                                    <label for="phone_number" id="phoneNumberLabel">연락처 : </label>
+                                                    <input type="text" class="form-control" placeholder=" - 을 제외한 형태로 적어주세요" id="phone_number" name="phone_number" value="">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <div class="form-floating">
-                                                    <label th:for="withPerson" id="withPersonLabel">동행자 : </label>
-                                                    <input type="text" th:field="*{withPerson}" class="form-control">
+                                                    <label for="withPerson" id="withPersonLabel">동행자 : </label>
+                                                    <input type="text" class="form-control" id="withPerson" name="withPerson" value="">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <div class="form-floating">
-                                                    <label th:for="company" id="companyLabel">회사 : </label>
-                                                    <input type="text" th:field="*{company}" class="form-control">
+                                                    <label for="company" id="companyLabel">회사 : </label>
+                                                    <input type="text" class="form-control" id="company" name="company" value="">
                                                 </div>
                                             </div>
                                         </div>
@@ -246,21 +241,19 @@
                                             <div class="col-md-6">
                                                 <div class="form-floating">
                                                     <div class="form-floating">
-                                                        <label th:for="purpose" id="purposeLabel">방문 목적 : </label>
-                                                        <input type="text" th:field="*{purpose}" class="form-control"
-                                                           th:class="${#fields.hasErrors('purpose')}? 'form-control fieldError' : 'form-control'">
+                                                        <label for="purpose" id="purposeLabel">방문 목적 : </label>
+                                                        <input type="text" class="form-control" id="purpose" name="purpose" value="">
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
                                         </div>
                                         <div class="row mb-3">
                                             <div>
                                                 <div class="form-floating mb-3 mb-md-0">
-                                                    <label  th:for="visit_date1" id="visitDateLabel">방문일 : </label>
-                                                    <input type="date" th:field="*{visit_date1}" class="form-control"
-                                                           th:class="${#fields.hasErrors('visit_date1')}? 'form-control fieldError' : 'form-control'"/>
+                                                    <label  for="visit_date1" id="visitDateLabel">방문일 : </label>
+                                                    <input type="date" class="form-control" id="visit_date1" name="visit_date1" value="2023-04-21"/>
                                                     <span id="fromTo">~</span>
-                                                    <input type="date" th:field="*{visit_date2}" class="form-control"/>
+                                                    <input type="date" class="form-control" id="visit_date2" name="visit_date2" value="2023-04-21"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -270,17 +263,17 @@
                                         <div class="d-grid"><button type="submit" class="btn btn-primary btn-block" onclick="setCheck();">submit</button></div>
                                     </div>
                                 </form>
-                        </div>
+                            </div>
                             <div class="card-footer text-center py-3">
-                                <div class="small"><a th:href="@{/reservation/info/all}">HOME</a>
+                                <div class="small"><a href="/reservation/info/all">HOME</a>
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-          </div>
         </main>
-<!--    </div>-->
-</div>
+        <!--    </div>-->
+    </div>
 
     <div id="layoutAuthentication_footer">
         <footer class="py-4 bg-light mt-auto">
