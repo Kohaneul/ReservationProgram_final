@@ -1,5 +1,10 @@
 package com.visit.program.ReservationProgram.web.controller;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
 import com.mysql.cj.Session;
 import com.visit.program.ReservationProgram.domain.dao.*;
 import com.visit.program.ReservationProgram.domain.dao.session.SessionConst;
@@ -12,16 +17,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
@@ -48,10 +56,6 @@ public class DinnerController {
         return  LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy/MM/dd HH:mm:ss"));
     }
 
-//    @ModelAttribute(name="employees")
-//    public List<Employee> employees(){
-//        return employeeService.findAll();
-//    }
 
     @GetMapping("/rapigen")
     public String enterPage(HttpSession session){
@@ -161,7 +165,7 @@ public class DinnerController {
     }
 
     @GetMapping("/update/{id}")
-    public String updateView(@PathVariable("id")Long id, Model model,HttpServletRequest request){
+    public String updateView(@PathVariable("id")Long id, Model model){
 
         DinnerReservation before = service.findOne(id);
         DinnerReservationUpdate reservation = new DinnerReservationUpdate
@@ -244,6 +248,22 @@ public class DinnerController {
         return "redirect:/dinner/info/all";
     }
 
+//    @GetMapping("/qr")
+//    public String codeTest2(){
+//        return "view2/checkInfo";
+//    }
+//
+//    @PostMapping("/qr")
+//    @ResponseBody
+//    public Object codeTest(@RequestParam("url")String url) throws WriterException, IOException {
+//        int width = 150;
+//        int height = 150;
+//        BitMatrix matrix = new MultiFormatWriter().encode(url, BarcodeFormat.QR_CODE, width, height);
+//        try (ByteArrayOutputStream out = new ByteArrayOutputStream();) {
+//            MatrixToImageWriter.writeToStream(matrix, "PNG", out);
+//            return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(out.toByteArray());
+//        }
+//    }
 
     @GetMapping("/admin/logOut")
     public String adminLogOut(HttpSession session){
@@ -251,5 +271,26 @@ public class DinnerController {
         return "redirect:/dinner/info/all";
     }
 
+    @GetMapping("/checkInfo")
+    public String checkedDinnerInfo(){
+        return "view2/checkInfo";
+    }
+
+    @PostMapping("/checkInfo")
+    public String checkedDinnerInfo2(@RequestParam String employee_name, RedirectAttributes redirectAttributes){
+        Long id = service.findByName(employee_name);
+        if(id==null){
+            return "redirect:/dinner/info/checkInfo";
+        }
+        service.updateAteInfo(id);
+        redirectAttributes.addAttribute("employee_name",employee_name);
+        return "redirect:/dinner/info/confirm";
+    }
+
+    @ResponseBody
+    @GetMapping("/confirm")
+    public String confirmInfo(@RequestParam String employee_name){
+        return employee_name+"님 확인되었습니다.";
+    }
 
 }

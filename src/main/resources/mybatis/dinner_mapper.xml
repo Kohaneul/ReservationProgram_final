@@ -12,7 +12,8 @@
     <select id="updateCheckedInfo">
         update dinner_info set id=#{id},is_checked=1 where id = #{id}
     </select>
-    <select id="updateCheckedReservation">
+
+    <select id="updateCheckedReservation" parameterType="com.visit.program.ReservationProgram.domain.dao.DinnerReservationCheckedUpdate">
         update dinner_reservation set is_checked=1, checked_date=#{checked_date} where id = #{id}
     </select>
 
@@ -25,12 +26,12 @@
         from dinner_reservation where id = #{id}
     </select>
 
-    <select id="findByName" resultType="java.lang.String">
-        select employee_name from dinner_reservation where id = #{id}
+    <select id="findByName" resultType="java.lang.Long">
+        select id from dinner_reservation where is_checked=false and employee_name = #{e:wqmployee_name} and visit_date like STR_TO_DATE(now(), '%Y-%m-%d');
     </select>
 
     <select id="findInfoOne" resultType="com.visit.program.ReservationProgram.domain.dao.DinnerInfo">
-        select* from dinner_info where id = #{id}
+        select * from dinner_info where id = #{id}
     </select>
 
     <select id="deleteDinnerInfo">
@@ -42,14 +43,19 @@
     </select>
 
     <select id="findAll" resultType="com.visit.program.ReservationProgram.domain.dao.DinnerReservationInfo">
-        select id,loginId,employee_name, qty, visit_date,write_date,is_checked from dinner_reservation where is_checked = 1 and month(STR_TO_DATE(#{visit_date}, '%Y-%m-%d')) =  month(now());
+        select id,loginId,employee_name, qty, part_name, visit_date,write_date,is_checked from dinner_reservation
     </select>
 
-      <select id = "findAllDTO" resultType="com.visit.program.ReservationProgram.domain.dao.DinnerReservationInfo">
+    <select id="updateAteInfo">
+        update dinner_reservation as A set A.ate = 1 where A.id = ((select id from
+            (select id from dinner_reservation where id=#{id} and is_checked=false and visit_date like STR_TO_DATE(now(), '%Y-%m-%d')) B))
+    </select>
+
+    <select id = "findAllDTO" resultType="com.visit.program.ReservationProgram.domain.dao.DinnerReservationInfo">
         select d1.id,d2.part_name,d2.loginId, d1.dinner_reservation_id, d2.id,
-               if(d2.qty-1 <![CDATA[ < ]]>1,d2.employee_name,concat(concat(d2.employee_name,' 외 '),concat(d2.qty-1,'명'))) as employee_name,d2.qty,
-             if(CHAR_LENGTH(d2.contents) <![CDATA[ <= ]]>8,d2.contents,concat(left(d2.contents,5),'..')) as contents
-               ,d2.visit_date,d2.write_date,d1.is_checked
+        if(d2.qty-1 <![CDATA[ < ]]>1,d2.employee_name,concat(concat(d2.employee_name,' 외 '),concat(d2.qty-1,'명'))) as employee_name,d2.qty,
+        if(CHAR_LENGTH(d2.contents) <![CDATA[ <= ]]>8,d2.contents,concat(left(d2.contents,5),'..')) as contents
+        ,d2.visit_date,d2.write_date,d1.is_checked
         from dinner_info d1 inner join dinner_reservation d2 on d1.id = d2.id
         <where>
             <if test="employee_name!=null and employee_name!=''">
@@ -70,10 +76,6 @@
         </where>
         order by d1.id desc
     </select>
-
-
-
-
 
 
 

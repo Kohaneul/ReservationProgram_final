@@ -19,7 +19,6 @@ import java.util.List;
 public class DinnerService {
 
     private final DinnerRepository repository;
-    private final EmployeeRepository employeeRepository;
 
     @Transactional
     public Long save(DinnerReservationSave dinnerSave){
@@ -68,6 +67,15 @@ public class DinnerService {
     @Transactional
     public void updateCheckedReservation(DinnerReservationCheckedUpdate update){
         repository.updateCheckedReservation(update);
+    }
+
+    public Long findByName(String employee_name){
+        Long id = repository.findByName(employee_name);
+        return id;
+    }
+    @Transactional
+    public void updateAteInfo(Long id){
+        repository.updateAteInfo(id);
     }
 
 

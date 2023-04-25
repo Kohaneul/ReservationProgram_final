@@ -14,4 +14,6 @@ public class DinnerReservationCheckedUpdate {
     private Boolean is_checked;
     private String checked_date;
 
+
+
 }

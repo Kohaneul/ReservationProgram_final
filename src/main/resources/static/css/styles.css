@@ -6326,7 +6326,10 @@ textarea.form-control-lg {
   opacity: 0.5;
 }
 .card.mb-4 {
-  width:1300px;
+ width:1300px;
+  font-size:20px;
+}
+.card.mb-44 {
   font-size:20px;
 }
 .offcanvas-header {

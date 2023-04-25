@@ -16,16 +16,15 @@ public interface DinnerRepository {
     void updateInfo(DinnerReservationUpdate dinnerReservationUpdate);
     void updateCheckedInfo(DinnerInfoCheckedUpdate update);
     void updateCheckedReservation(DinnerReservationCheckedUpdate update);
-
     void saveInfo(SaveDinnerInfo dinnerInfo);
     List<DinnerReservationInfo> findAllDTO(DinnerInfoDTO infoDTO);
-
     List<DinnerReservationInfo> findAll(@Param("visit_date") String visit_date);
-
+    Long findByName(@Param("employee_name")String employee_name);
+    void updateAteInfo(@Param("id")Long id);
     DinnerReservation findOne(@Param("id")Long id);
     DinnerInfo findInfoOne(@Param("id")Long id);
     void deleteDinnerInfo(@Param("id")Long id);
-    void deleteDinnerReservation(@Param("id")Long id);
-
+   void deleteDinnerReservation(@Param("id")Long id);
+//    Long findDinnerInfo(@Param("employee_name")String employee_name);
 
 }
