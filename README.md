@@ -7,6 +7,8 @@
 ### 대상 : 본사 소속 직원, 경비실
 
 ### PROCESS 
+![image](https://github.com/Kohaneul/ReservationProgram_final/assets/96707563/c0411ce0-df7a-413c-9be3-cb5ffebc64e4)
+
 1. `직원` : 방문자에 대한 정보를 사전 기입함
 2. `경비실` : 해당 방문자 실제 방문시 경비실에서 신원확인 후 방문 체크
 
