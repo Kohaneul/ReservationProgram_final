@@ -14,10 +14,10 @@
 `Java11, SpringBoot, Gradle, MySQL, JavaScript, MyBatis, HTML, CSS, Thymeleaf`
 
 ### 사용방법  
-1. `직원용`
-<ol> 입력</ol>
+#### 1. `직원용`
+- 입력
 - 조회
 - 수정/삭제
-2. `경비실용`
+#### 2. `경비실용`
 - 조회
 - 방문 여부 확인
