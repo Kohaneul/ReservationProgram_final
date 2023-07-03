@@ -10,8 +10,8 @@
 
 <img src="https://github.com/Kohaneul/ReservationProgram_final/assets/96707563/387731ca-9e3e-45a8-80e9-825a1c6de723.png" width="50%">
 
-1. `직원` : 방문자에 대한 정보를 사전 기입함
-2. `경비실` : 해당 방문자 실제 방문시 경비실에서 신원확인 후 방문 체크
+  `직원` : 방문자에 대한 정보를 사전 기입함
+  `경비실` : 해당 방문자 실제 방문시 경비실에서 신원확인 후 방문 체크
 
 ### 개발툴 
 `Java11, SpringBoot, Gradle, MySQL, JavaScript, MyBatis, HTML, CSS, Thymeleaf`
