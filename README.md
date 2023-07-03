@@ -1,5 +1,4 @@
 # 방문예약프로그램
------ 
 
 ### 프로젝트 목적
 - 전산화를 통한 효율적인 신원확인 (기존 : 장부 수기 작성)
@@ -11,13 +10,14 @@
 - `접견자` 방문자에 대한 정보를 사전 기입함
 - `경비실` 해당 방문자 실제 방문시 경비실에서 신원확인 후 방문 체크
 
-### 개발툴 `Java11, SpringBoot, Gradle, MySQL, JavaScript, MyBatis, HTML, CSS, Thymeleaf`
+### 개발툴 
+`Java11, SpringBoot, Gradle, MySQL, JavaScript, MyBatis, HTML, CSS, Thymeleaf`
 
 ### 사용방법  
 1. 직원용
-(1) 입력
-(2) 조회
-(3) 수정/삭제
+- 입력
+- 조회
+- 수정/삭제
 2.  경비실용
-(1) 조회
-(2) 방문체크
+- 조회
+- 방문 여부 확인
