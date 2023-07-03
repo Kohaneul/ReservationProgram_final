@@ -7,7 +7,9 @@
 
 ### 대상 : 본사 소속 직원, 경비실
 
-### PROCESS : 접견자가 방문자에 대한 정보를 사전 기입 후 해당 방문자 실제 방문시 경비실에서 신원확인 후 방문 체크
+### PROCESS 
+- `접견자` 방문자에 대한 정보를 사전 기입함
+- `경비실` 해당 방문자 실제 방문시 경비실에서 신원확인 후 방문 체크
 
 ### 개발툴
 `Java11, SpringBoot, Gradle, MySQL, JavaScript, MyBatis, HTML, CSS, Thymeleaf`
