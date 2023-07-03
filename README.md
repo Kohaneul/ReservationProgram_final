@@ -14,10 +14,10 @@
 `Java11, SpringBoot, Gradle, MySQL, JavaScript, MyBatis, HTML, CSS, Thymeleaf`
 
 ### 사용방법  
->직원용
->>##입력
+> 직원용
+>> 입력
 >> 조회
->> 수정/삭제
+>### 수정/삭제
 
 >경비실용
 >> 조회
