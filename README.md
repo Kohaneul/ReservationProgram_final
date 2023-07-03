@@ -14,9 +14,14 @@ Java11, SpringBoot, Gradle, MySQL, JavaScript, MyBatis, HTML, CSS, Thymeleaf
 
 ### 사용방법  
 1. 직원용
-<ol>1) 입력</ol>
-<ol>2) 조회</ol>  
-<ol>3) 수정/삭제</ol>
-2. 경비실용
-<ol>1) 조회</ol>
-<ol>2) 방문체크</ol>
+<a>1) 입력</a>
+<br>
+<a>2) 조회</a>
+<br>
+<a>3) 수정/삭제</a>
+<br>
+3. 경비실용
+<a>1) 조회</a>
+<br>
+<a>2) 방문체크</a>
+<br>
