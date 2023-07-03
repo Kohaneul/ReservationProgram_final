@@ -11,7 +11,7 @@
 <img src="https://github.com/Kohaneul/ReservationProgram_final/assets/96707563/387731ca-9e3e-45a8-80e9-825a1c6de723.png" width="55%">
 
 ### 개발툴 
-`Java11, SpringBoot, Gradle, MySQL, JavaScript, MyBatis, HTML, CSS, Thymeleaf`
+`Java11, SpringBoot, Gradle, MySQL, AJAX, JavaScript, MyBatis, HTML, CSS, Thymeleaf, LINUX CENTOS 7`
 
 ### 사용방법  
 #### 1. `직원용`
