@@ -23,8 +23,7 @@
 - 방문 시각 체크 : 사전 입력된 방문자 정보와 일치할 시 방문 시각 체크
 
 ### PORTFOLIO
-![image](https://github.com/Kohaneul/ReservationProgram_final/assets/96707563/32e5b248-9372-4320-a806-5bfbaf74d895)
-![image](https://github.com/Kohaneul/ReservationProgram_final/assets/96707563/4363c039-94e7-4b66-be23-afa72382f0f7)
-![image](https://github.com/Kohaneul/ReservationProgram_final/assets/96707563/59bfb6b9-cb9f-4d42-8ed1-83580c1f4d3a)
+
+[방문예약 프로그램.pdf](https://github.com/Kohaneul/ReservationProgram_final/files/11937573/default.pdf)
 
 
